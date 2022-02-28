@@ -10,7 +10,7 @@ MW::MW(QWidget *parent)
       copyOverlay(nullptr),
       saveOverlay(nullptr),
       renameOverlay(nullptr),
-      infoBarFullscreen(nullptr),
+//      infoBarFullscreen(nullptr),
       imageInfoOverlay(nullptr),
       floatingMessage(nullptr),
       cropPanel(nullptr),
@@ -72,7 +72,7 @@ void MW::setupUi() {
     //layout.addWidget(centralWidget.get());
 	layout.addWidget(folderView.get());
     //controlsOverlay = new ControlsOverlay(docWidget.get());
-    infoBarFullscreen = new FullscreenInfoOverlayProxy(viewerWidget.get());
+//    infoBarFullscreen = new FullscreenInfoOverlayProxy(viewerWidget.get());
     sidePanel = new SidePanel(this);
     layout.addWidget(sidePanel);
     imageInfoOverlay = new ImageInfoOverlayProxy(this);
@@ -106,7 +106,7 @@ void MW::setupFullUi() {
     setupCropPanel();
     viewerWidget->setupMainPanel();
 //    infoBarWindowed->init();
-    infoBarFullscreen->init();
+//    infoBarFullscreen->init();
 }
 
 void MW::setupCropPanel() {
@@ -310,10 +310,12 @@ void MW::toggleFullscreenInfoBar() {
     if(!this->isFullScreen())
         return;
     showInfoBarFullscreen = !showInfoBarFullscreen;
+#if 0
     if(showInfoBarFullscreen)
         infoBarFullscreen->showWhenReady();
     else
         infoBarFullscreen->hide();
+#endif
 }
 
 void MW::toggleImageInfoOverlay() {
@@ -769,11 +771,11 @@ void MW::onInfoUpdated() {
     //if(centralWidget->currentViewMode() == MODE_FOLDERVIEW) {
 	if(true) {
         windowTitle = "Folder view";
-        infoBarFullscreen->setInfo("", "No file opened.", "");
+//        infoBarFullscreen->setInfo("", "No file opened.", "");
 //        infoBarWindowed->setInfo("", "No file opened.", "");
     } else if(info.fileName.isEmpty()) {
         windowTitle = qApp->applicationName();
-        infoBarFullscreen->setInfo("", "No file opened.", "");
+//        infoBarFullscreen->setInfo("", "No file opened.", "");
 //        infoBarWindowed->setInfo("", "No file opened.", "");
     } else {
         windowTitle = info.fileName;
@@ -801,7 +803,7 @@ void MW::onInfoUpdated() {
         if(info.edited)
             windowTitle.prepend("* ");
 
-        infoBarFullscreen->setInfo(posString, info.fileName + (info.edited ? "  *" : ""), resString + "  " + sizeString);
+//        infoBarFullscreen->setInfo(posString, info.fileName + (info.edited ? "  *" : ""), resString + "  " + sizeString);
         //infoBarWindowed->setInfo(posString, info.fileName + (info.edited ? "  *" : ""), resString + "  " + sizeString + " " + states);
     }
     setWindowTitle(windowTitle);
@@ -908,12 +910,13 @@ void MW::adaptToWindowState() {
     viewerWidget->hidePanel();
     if(isFullScreen()) { //-------------------------------------- fullscreen ---
         applyFullscreenBackground();
-//        infoBarWindowed->hide();
+#if 0
+        infoBarWindowed->hide();
         if(showInfoBarFullscreen)
             infoBarFullscreen->showWhenReady();
         else
             infoBarFullscreen->hide();
-#if 0
+
         if(viewerWidget->panelPosition() == PANEL_BOTTOM || !viewerWidget->panelEnabled())
             controlsOverlay->show();
         else
@@ -921,8 +924,8 @@ void MW::adaptToWindowState() {
 #endif
     } else { //------------------------------------------------------ window ---
         applyWindowedBackground();
-        infoBarFullscreen->hide();
 #if 0
+        infoBarFullscreen->hide();
         if(showInfoBarWindowed)
             infoBarWindowed->show();
         else
