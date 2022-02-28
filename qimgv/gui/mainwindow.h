@@ -106,7 +106,7 @@ private:
 
     //ControlsOverlay *controlsOverlay;
     FullscreenInfoOverlayProxy *infoBarFullscreen;
-    std::shared_ptr<InfoBarProxy> infoBarWindowed;
+    //std::shared_ptr<InfoBarProxy> infoBarWindowed;
     FloatingMessageProxy *floatingMessage;
 
     PanelHPosition panelPosition;

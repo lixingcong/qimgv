@@ -59,7 +59,7 @@ MW::MW(QWidget *parent)
  */
 void MW::setupUi() {
     viewerWidget.reset(new ViewerWidget(this));
-    infoBarWindowed.reset(new InfoBarProxy(this));
+//    infoBarWindowed.reset(new InfoBarProxy(this));
     //docWidget.reset(new DocumentWidget(viewerWidget, infoBarWindowed));
     folderView.reset(new FolderViewProxy(this));
 	connect(folderView.get(), &FolderViewProxy::sortingSelected, this, &MW::sortingSelected);
@@ -105,7 +105,7 @@ void MW::setupUi() {
 void MW::setupFullUi() {
     setupCropPanel();
     viewerWidget->setupMainPanel();
-    infoBarWindowed->init();
+//    infoBarWindowed->init();
     infoBarFullscreen->init();
 }
 
@@ -770,11 +770,11 @@ void MW::onInfoUpdated() {
 	if(true) {
         windowTitle = "Folder view";
         infoBarFullscreen->setInfo("", "No file opened.", "");
-        infoBarWindowed->setInfo("", "No file opened.", "");
+//        infoBarWindowed->setInfo("", "No file opened.", "");
     } else if(info.fileName.isEmpty()) {
         windowTitle = qApp->applicationName();
         infoBarFullscreen->setInfo("", "No file opened.", "");
-        infoBarWindowed->setInfo("", "No file opened.", "");
+//        infoBarWindowed->setInfo("", "No file opened.", "");
     } else {
         windowTitle = info.fileName;
         if(settings->windowTitleExtendedInfo()) {
@@ -802,7 +802,7 @@ void MW::onInfoUpdated() {
             windowTitle.prepend("* ");
 
         infoBarFullscreen->setInfo(posString, info.fileName + (info.edited ? "  *" : ""), resString + "  " + sizeString);
-        infoBarWindowed->setInfo(posString, info.fileName + (info.edited ? "  *" : ""), resString + "  " + sizeString + " " + states);
+        //infoBarWindowed->setInfo(posString, info.fileName + (info.edited ? "  *" : ""), resString + "  " + sizeString + " " + states);
     }
     setWindowTitle(windowTitle);
 }
@@ -908,7 +908,7 @@ void MW::adaptToWindowState() {
     viewerWidget->hidePanel();
     if(isFullScreen()) { //-------------------------------------- fullscreen ---
         applyFullscreenBackground();
-        infoBarWindowed->hide();
+//        infoBarWindowed->hide();
         if(showInfoBarFullscreen)
             infoBarFullscreen->showWhenReady();
         else
@@ -922,11 +922,11 @@ void MW::adaptToWindowState() {
     } else { //------------------------------------------------------ window ---
         applyWindowedBackground();
         infoBarFullscreen->hide();
+#if 0
         if(showInfoBarWindowed)
             infoBarWindowed->show();
         else
             infoBarWindowed->hide();
-#if 0
         controlsOverlay->hide();
 #endif
     }
