@@ -58,7 +58,7 @@ void Core::initGui() {
 
 void Core::attachModel(DirectoryModel *_model) {
     model.reset(_model);
-    thumbPanelPresenter.setModel(model);
+//    thumbPanelPresenter.setModel(model);
     folderViewPresenter.setModel(model);
     bool showDirs = (settings->folderViewMode() == FV_EXT_FOLDERS);
     folderViewPresenter.setShowDirs(showDirs);
@@ -71,7 +71,7 @@ void Core::initComponents() {
 }
 
 void Core::connectComponents() {
-    thumbPanelPresenter.setView(mw->getThumbnailPanel());
+//    thumbPanelPresenter.setView(mw->getThumbnailPanel());
 //    connect(&thumbPanelPresenter, &DirectoryPresenter::fileActivated,
 //            this, &Core::onDirectoryViewFileActivated);
 //    connect(&thumbPanelPresenter, &DirectoryPresenter::dirActivated,
@@ -289,7 +289,7 @@ void Core::syncRandomizer() {
 }
 
 void Core::onModelLoaded() {
-    thumbPanelPresenter.reloadModel();
+//    thumbPanelPresenter.reloadModel();
     folderViewPresenter.reloadModel();
     if(shuffle)
         syncRandomizer();
@@ -1211,7 +1211,7 @@ bool Core::loadFileIndex(int index, bool async, bool preload) {
         model->preload(model->nextOf(entry.path));
         model->preload(model->prevOf(entry.path));
     }
-    thumbPanelPresenter.selectAndFocus(entry.path);
+//    thumbPanelPresenter.selectAndFocus(entry.path);
     folderViewPresenter.selectAndFocus(entry.path);
     updateInfoString();
     return true;
@@ -1404,8 +1404,8 @@ void Core::onModelItemUpdated(QString filePath) {
 
 void Core::onModelSortingChanged(SortingMode mode) {
     mw->onSortingChanged(mode);
-    thumbPanelPresenter.reloadModel();
-    thumbPanelPresenter.selectAndFocus(state.currentFilePath);
+//    thumbPanelPresenter.reloadModel();
+//    thumbPanelPresenter.selectAndFocus(state.currentFilePath);
     folderViewPresenter.reloadModel();
     folderViewPresenter.selectAndFocus(state.currentFilePath);
 }

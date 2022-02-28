@@ -58,7 +58,7 @@ MW::MW(QWidget *parent)
  *  ViewerWidget exists for input handling reasons (correct overlay hover handling)
  */
 void MW::setupUi() {
-    viewerWidget.reset(new ViewerWidget(this));
+//    viewerWidget.reset(new ViewerWidget(this));
 //    infoBarWindowed.reset(new InfoBarProxy(this));
     //docWidget.reset(new DocumentWidget(viewerWidget, infoBarWindowed));
     folderView.reset(new FolderViewProxy(this));
@@ -77,7 +77,8 @@ void MW::setupUi() {
     layout.addWidget(sidePanel);
     imageInfoOverlay = new ImageInfoOverlayProxy(this);
     floatingMessage = new FloatingMessageProxy(this);
-		return; // 以下代码均为全屏预览单个文件的Widget
+    // 以下代码均为全屏预览单个文件的Widget
+#if 0
     connect(viewerWidget.get(), &ViewerWidget::scalingRequested, this, &MW::scalingRequested);
     connect(viewerWidget.get(), &ViewerWidget::draggedOut, this, qOverload<>(&MW::draggedOut));
     connect(viewerWidget.get(), &ViewerWidget::playbackFinished, this, &MW::playbackFinished);
@@ -100,16 +101,18 @@ void MW::setupUi() {
     connect(this, &MW::volumeDown,  viewerWidget.get(), &ViewerWidget::volumeDown);
     connect(this, &MW::toggleTransparencyGrid, viewerWidget.get(), &ViewerWidget::toggleTransparencyGrid);
     connect(this, &MW::setLoopPlayback,  viewerWidget.get(), &ViewerWidget::setLoopPlayback);
+#endif
 }
 
 void MW::setupFullUi() {
     setupCropPanel();
-    viewerWidget->setupMainPanel();
+//    viewerWidget->setupMainPanel();
 //    infoBarWindowed->init();
 //    infoBarFullscreen->init();
 }
 
 void MW::setupCropPanel() {
+#if 0
     if(cropPanel)
         return;
     cropOverlay = new CropOverlay(viewerWidget.get());
@@ -119,19 +122,24 @@ void MW::setupCropPanel() {
     connect(cropPanel, &CropPanel::crop,   this, &MW::cropRequested);
     connect(cropPanel, &CropPanel::cropAndSave, this, &MW::hideCropPanel);
     connect(cropPanel, &CropPanel::cropAndSave, this, &MW::cropAndSaveRequested);
+#endif
 }
 
 void MW::setupCopyOverlay() {
+#ifdef XXXX // 2022年02月28日
     copyOverlay = new CopyOverlay(viewerWidget.get());
     connect(copyOverlay, &CopyOverlay::copyRequested, this, &MW::copyRequested);
     connect(copyOverlay, &CopyOverlay::moveRequested, this, &MW::moveRequested);
+#endif
 }
 
 void MW::setupSaveOverlay() {
+#ifdef XXXX // 2022年02月28日
     saveOverlay = new SaveConfirmOverlay(viewerWidget.get());
     connect(saveOverlay, &SaveConfirmOverlay::saveClicked,    this, &MW::saveRequested);
     connect(saveOverlay, &SaveConfirmOverlay::saveAsClicked,  this, &MW::saveAsClicked);
     connect(saveOverlay, &SaveConfirmOverlay::discardClicked, this, &MW::discardEditsRequested);
+#endif
 }
 
 void MW::setupRenameOverlay() {
@@ -146,7 +154,7 @@ void MW::toggleFolderView() {
         copyOverlay->hide();
     if(renameOverlay)
         renameOverlay->hide();
-    viewerWidget->hidePanel();
+//    viewerWidget->hidePanel();
     imageInfoOverlay->hide();
 //    centralWidget->toggleViewMode();
     onInfoUpdated();
@@ -158,7 +166,7 @@ void MW::enableFolderView() {
         copyOverlay->hide();
     if(renameOverlay)
         renameOverlay->hide();
-    viewerWidget->hidePanel();
+//    viewerWidget->hidePanel();
     imageInfoOverlay->hide();
 //    centralWidget->showFolderView();
     onInfoUpdated();
@@ -175,42 +183,50 @@ ViewMode MW::currentViewMode() {
 }
 
 void MW::fitWindow() {
+#ifdef XXXX // 2022年02月28日
     if(viewerWidget->interactionEnabled()) {
         viewerWidget->fitWindow();
     } else {
         showMessage("Zoom temporary disabled");
     }
+#endif
 }
 
 void MW::fitWidth() {
+#ifdef XXXX // 2022年02月28日
     if(viewerWidget->interactionEnabled()) {
         viewerWidget->fitWidth();
     } else {
         showMessage("Zoom temporary disabled");
     }
+#endif
 }
 
 void MW::fitOriginal() {
+#ifdef XXXX // 2022年02月28日
     if(viewerWidget->interactionEnabled()) {
         viewerWidget->fitOriginal();
     } else {
         showMessage("Zoom temporary disabled");
     }
+#endif
 }
 
 // switch between 1:1 and Fit All
 // TODO: move to viewerWidget?
 void MW::switchFitMode() {
+#ifdef XXXX // 2022年02月28日
     if(viewerWidget->fitMode() == FIT_WINDOW)
         viewerWidget->setFitMode(FIT_ORIGINAL);
     else
         viewerWidget->setFitMode(FIT_WINDOW);
+#endif
 }
 
 void MW::closeImage() {
     info.fileName = "";
     info.filePath = "";
-    viewerWidget->closeImage();
+//    viewerWidget->closeImage();
 }
 
 // todo: fix flicker somehow
@@ -243,25 +259,25 @@ void MW::preShowResize(QSize sz) {
 void MW::showImage(std::unique_ptr<QPixmap> pixmap) {
     if(settings->autoResizeWindow())
         preShowResize(pixmap->size());
-    viewerWidget->showImage(std::move(pixmap));
+//    viewerWidget->showImage(std::move(pixmap));
     updateCropPanelData();
 }
 
 void MW::showAnimation(std::shared_ptr<QMovie> movie) {
     if(settings->autoResizeWindow())
         preShowResize(movie->frameRect().size());
-    viewerWidget->showAnimation(movie);
+//    viewerWidget->showAnimation(movie);
     updateCropPanelData();
 }
 
 void MW::showVideo(QString file) {
     if(settings->autoResizeWindow())
         preShowResize(QSize()); // tmp. find a way to get this though mpv BEFORE playback
-    viewerWidget->showVideo(file);
+//    viewerWidget->showVideo(file);
 }
 
 void MW::showContextMenu() {
-    viewerWidget->showContextMenu();
+//    viewerWidget->showContextMenu();
 }
 
 void MW::onSortingChanged(SortingMode mode) {
@@ -289,20 +305,20 @@ void MW::setDirectoryPath(QString path) {
 }
 
 void MW::toggleLockZoom() {
-    viewerWidget->toggleLockZoom();
-    if(viewerWidget->lockZoomEnabled())
-        showMessage("Zoom lock: ON");
-    else
-        showMessage("Zoom lock: OFF");
+//    viewerWidget->toggleLockZoom();
+//    if(viewerWidget->lockZoomEnabled())
+//        showMessage("Zoom lock: ON");
+//    else
+//        showMessage("Zoom lock: OFF");
     onInfoUpdated();
 }
 
 void MW::toggleLockView() {
-    viewerWidget->toggleLockView();
-    if(viewerWidget->lockViewEnabled())
-        showMessage("View lock: ON");
-    else
-        showMessage("View lock: OFF");
+//    viewerWidget->toggleLockView();
+//    if(viewerWidget->lockViewEnabled())
+//        showMessage("View lock: ON");
+//    else
+//        showMessage("View lock: OFF");
     onInfoUpdated();
 }
 
@@ -343,20 +359,22 @@ void MW::toggleRenameOverlay(QString currentName) {
 }
 
 void MW::toggleScalingFilter() {
+#ifdef XXXX // 2022年02月28日
     if(viewerWidget->scalingFilter() == QI_FILTER_BILINEAR)
         setFilterNearest();
     else
         setFilterBilinear();
+#endif
 }
 
 void MW::setFilterNearest() {
     showMessage("Filter: nearest", 600);
-    viewerWidget->setFilterNearest();
+//    viewerWidget->setFilterNearest();
 }
 
 void MW::setFilterBilinear() {
     showMessage("Filter: bilinear", 600);
-    viewerWidget->setFilterBilinear();
+//    viewerWidget->setFilterBilinear();
 }
 
 bool MW::isCropPanelActive() {
@@ -364,7 +382,7 @@ bool MW::isCropPanelActive() {
 }
 
 void MW::onScalingFinished(std::unique_ptr<QPixmap> scaled) {
-    viewerWidget->onScalingFinished(std::move(scaled));
+//    viewerWidget->onScalingFinished(std::move(scaled));
 }
 
 void MW::saveWindowGeometry() {
@@ -480,8 +498,8 @@ void MW::dropEvent(QDropEvent *event) {
 
 void MW::resizeEvent(QResizeEvent *event) {
     if(activeSidePanel == SIDEPANEL_CROP) {
-        cropOverlay->setImageScale(viewerWidget->currentScale());
-        cropOverlay->setImageDrawRect(viewerWidget->imageRect());
+//        cropOverlay->setImageScale(viewerWidget->currentScale());
+//        cropOverlay->setImageDrawRect(viewerWidget->imageRect());
     }
     FloatingWidgetContainer::resizeEvent(event);
 }
@@ -502,7 +520,7 @@ void MW::showSaveDialog(QString filePath) {
 }
 
 QString MW::getSaveFileName(QString filePath) {
-    viewerWidget->hidePanel();
+//    viewerWidget->hidePanel();
     QStringList filters;
     // generate filter for writable images
     // todo: some may need to be blacklisted
@@ -545,7 +563,7 @@ QString MW::getSaveFileName(QString filePath) {
 }
 
 void MW::showOpenDialog(QString path) {
-    viewerWidget->hidePanel();
+//    viewerWidget->hidePanel();
 
     QFileDialog dialog(this);
     QStringList imageFilter;
@@ -579,7 +597,7 @@ DialogResult MW::fileReplaceDialog(QString src, QString dst, FileReplaceMode mod
 }
 
 void MW::showSettings() {
-    viewerWidget->hidePanel();
+//    viewerWidget->hidePanel();
 
     SettingsDialog settingsDialog(this);
     settingsDialog.exec();
@@ -626,12 +644,14 @@ void MW::showWindowed() {
 }
 
 void MW::updateCropPanelData() {
+#ifdef XXXX // 2022年02月28日
     if(cropPanel && activeSidePanel == SIDEPANEL_CROP) {
         cropPanel->setImageRealSize(viewerWidget->sourceSize());
         cropOverlay->setImageDrawRect(viewerWidget->imageRect());
         cropOverlay->setImageScale(viewerWidget->currentScale());
         cropOverlay->setImageRealSize(viewerWidget->sourceSize());
     }
+#endif
 }
 
 void MW::showSaveOverlay() {
@@ -689,17 +709,18 @@ void MW::hideCropPanel() {
     sidePanel->hide();
     if(activeSidePanel == SIDEPANEL_CROP) {
         cropOverlay->hide();
-        viewerWidget->enableInteraction();
+//        viewerWidget->enableInteraction();
     }
     activeSidePanel = SIDEPANEL_NONE;
 }
 
 void MW::triggerCopyOverlay() {
+#ifdef XXXX // 2022年02月28日
     if(!viewerWidget->isDisplaying())
         return;
     if(!copyOverlay)
         setupCopyOverlay();
-#if 0
+
     if(centralWidget->currentViewMode() == MODE_FOLDERVIEW)
         return;
     if(copyOverlay->operationMode() == OVERLAY_COPY) {
@@ -712,12 +733,12 @@ void MW::triggerCopyOverlay() {
 }
 
 void MW::triggerMoveOverlay() {
+#ifdef XXXX // 2022年02月28日
     if(!viewerWidget->isDisplaying())
         return;
     if(!copyOverlay)
         setupCopyOverlay();
 
-#if 0
     if(centralWidget->currentViewMode() == MODE_FOLDERVIEW)
         return;
     if(copyOverlay->operationMode() == OVERLAY_MOVE) {
@@ -793,10 +814,12 @@ void MW::onInfoUpdated() {
             states.append(" [slideshow]");
         if(info.shuffle)
             states.append(" [shuffle]");
+#ifdef XXXX // 2022年02月28日
         if(viewerWidget->lockZoomEnabled())
             states.append(" [zoom lock]");
         if(viewerWidget->lockViewEnabled())
             states.append(" [view lock]");
+#endif
 
         if(!settings->infoBarWindowed() && !states.isEmpty())
             windowTitle.append(" -" + states);
@@ -819,8 +842,10 @@ std::shared_ptr<FolderViewProxy> MW::getFolderView() {
     return folderView;
 }
 
-std::shared_ptr<ThumbnailStripProxy> MW::getThumbnailPanel() {
-    return viewerWidget->getThumbPanel();
+std::shared_ptr<ThumbnailStripProxy> MW::getThumbnailPanel()
+{
+	//    return viewerWidget->getThumbPanel();
+	return nullptr;
 }
 
 // todo: this is crap
@@ -907,7 +932,7 @@ void MW::applyFullscreenBackground() {
 
 // changes ui elements according to fullscreen state
 void MW::adaptToWindowState() {
-    viewerWidget->hidePanel();
+//    viewerWidget->hidePanel();
     if(isFullScreen()) { //-------------------------------------- fullscreen ---
         applyFullscreenBackground();
 #if 0
@@ -934,7 +959,7 @@ void MW::adaptToWindowState() {
 #endif
     }
     folderView->onFullscreenModeChanged(isFullScreen());
-    viewerWidget->onFullscreenModeChanged(isFullScreen());
+//    viewerWidget->onFullscreenModeChanged(isFullScreen());
 }
 
 void MW::paintEvent(QPaintEvent *event) {
@@ -945,7 +970,7 @@ void MW::paintEvent(QPaintEvent *event) {
 
 void MW::leaveEvent(QEvent *event) {
     QWidget::leaveEvent(event);
-    viewerWidget->hidePanelAnimated();
+//    viewerWidget->hidePanelAnimated();
 }
 
 // block native tab-switching so we can use it in shortcuts

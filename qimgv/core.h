@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <QObject>
 #include <QDebug>
@@ -58,7 +58,7 @@ private:
     // components
     std::shared_ptr<DirectoryModel> model;
 
-    DirectoryPresenter thumbPanelPresenter, folderViewPresenter;
+    DirectoryPresenter folderViewPresenter;
 
     void rotateByDegrees(int degrees);
     void reset();

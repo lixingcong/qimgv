@@ -82,13 +82,13 @@ public:
     DialogResult fileReplaceDialog(QString source, QString target, FileReplaceMode mode, bool multiple);
 
 private:
-    std::shared_ptr<ViewerWidget> viewerWidget;
+    //std::shared_ptr<ViewerWidget> viewerWidget;
     QHBoxLayout layout;
     QTimer windowGeometryChangeTimer;
     int currentDisplay;
 
     bool cropPanelActive, showInfoBarFullscreen, showInfoBarWindowed, maximized;
-    std::shared_ptr<DocumentWidget> docWidget;
+    //std::shared_ptr<DocumentWidget> docWidget;
     std::shared_ptr<FolderViewProxy> folderView;
     //std::shared_ptr<CentralWidget> centralWidget;
     ActiveSidePanel activeSidePanel;
