@@ -71,7 +71,7 @@ void MW::setupUi() {
     //centralWidget.reset(new CentralWidget(docWidget, folderView, this));
     //layout.addWidget(centralWidget.get());
 	layout.addWidget(folderView.get());
-    controlsOverlay = new ControlsOverlay(docWidget.get());
+    //controlsOverlay = new ControlsOverlay(docWidget.get());
     infoBarFullscreen = new FullscreenInfoOverlayProxy(viewerWidget.get());
     sidePanel = new SidePanel(this);
     layout.addWidget(sidePanel);
@@ -912,11 +912,13 @@ void MW::adaptToWindowState() {
         if(showInfoBarFullscreen)
             infoBarFullscreen->showWhenReady();
         else
-            infoBarFullscreen->hide();    
+            infoBarFullscreen->hide();
+#if 0
         if(viewerWidget->panelPosition() == PANEL_BOTTOM || !viewerWidget->panelEnabled())
             controlsOverlay->show();
         else
             controlsOverlay->hide();
+#endif
     } else { //------------------------------------------------------ window ---
         applyWindowedBackground();
         infoBarFullscreen->hide();
@@ -924,7 +926,9 @@ void MW::adaptToWindowState() {
             infoBarWindowed->show();
         else
             infoBarWindowed->hide();
+#if 0
         controlsOverlay->hide();
+#endif
     }
     folderView->onFullscreenModeChanged(isFullScreen());
     viewerWidget->onFullscreenModeChanged(isFullScreen());
