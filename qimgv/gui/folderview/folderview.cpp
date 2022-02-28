@@ -1,4 +1,4 @@
-#include "folderview.h"
+﻿#include "folderview.h"
 #include "ui_folderview.h"
 
 FolderView::FolderView(QWidget *parent) :

@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 
 // TODO: nuke this and rewrite
 
@@ -60,22 +60,24 @@ MW::MW(QWidget *parent)
 void MW::setupUi() {
     viewerWidget.reset(new ViewerWidget(this));
     infoBarWindowed.reset(new InfoBarProxy(this));
-    docWidget.reset(new DocumentWidget(viewerWidget, infoBarWindowed));
+    //docWidget.reset(new DocumentWidget(viewerWidget, infoBarWindowed));
     folderView.reset(new FolderViewProxy(this));
-    connect(folderView.get(), &FolderViewProxy::sortingSelected, this, &MW::sortingSelected);
-    connect(folderView.get(), &FolderViewProxy::directorySelected, this, &MW::opened);
-    connect(folderView.get(), &FolderViewProxy::copyUrlsRequested, this, &MW::copyUrlsRequested);
-    connect(folderView.get(), &FolderViewProxy::moveUrlsRequested, this, &MW::moveUrlsRequested);
-    connect(folderView.get(), &FolderViewProxy::showFoldersChanged, this, &MW::showFoldersChanged);
+	connect(folderView.get(), &FolderViewProxy::sortingSelected, this, &MW::sortingSelected);
+	connect(folderView.get(), &FolderViewProxy::directorySelected, this, &MW::opened);
+	connect(folderView.get(), &FolderViewProxy::copyUrlsRequested, this, &MW::copyUrlsRequested);
+	connect(folderView.get(), &FolderViewProxy::moveUrlsRequested, this, &MW::moveUrlsRequested);
+	connect(folderView.get(), &FolderViewProxy::showFoldersChanged, this, &MW::showFoldersChanged);
 
-    centralWidget.reset(new CentralWidget(docWidget, folderView, this));
-    layout.addWidget(centralWidget.get());
+    //centralWidget.reset(new CentralWidget(docWidget, folderView, this));
+    //layout.addWidget(centralWidget.get());
+	layout.addWidget(folderView.get());
     controlsOverlay = new ControlsOverlay(docWidget.get());
     infoBarFullscreen = new FullscreenInfoOverlayProxy(viewerWidget.get());
     sidePanel = new SidePanel(this);
     layout.addWidget(sidePanel);
     imageInfoOverlay = new ImageInfoOverlayProxy(this);
     floatingMessage = new FloatingMessageProxy(this);
+		return; // 以下代码均为全屏预览单个文件的Widget
     connect(viewerWidget.get(), &ViewerWidget::scalingRequested, this, &MW::scalingRequested);
     connect(viewerWidget.get(), &ViewerWidget::draggedOut, this, qOverload<>(&MW::draggedOut));
     connect(viewerWidget.get(), &ViewerWidget::playbackFinished, this, &MW::playbackFinished);
@@ -146,7 +148,7 @@ void MW::toggleFolderView() {
         renameOverlay->hide();
     viewerWidget->hidePanel();
     imageInfoOverlay->hide();
-    centralWidget->toggleViewMode();
+//    centralWidget->toggleViewMode();
     onInfoUpdated();
 }
 
@@ -158,17 +160,18 @@ void MW::enableFolderView() {
         renameOverlay->hide();
     viewerWidget->hidePanel();
     imageInfoOverlay->hide();
-    centralWidget->showFolderView();
+//    centralWidget->showFolderView();
     onInfoUpdated();
 }
 
 void MW::enableDocumentView() {
-    centralWidget->showDocumentView();
+//    centralWidget->showDocumentView();
     onInfoUpdated();
 }
 
 ViewMode MW::currentViewMode() {
-    return centralWidget->currentViewMode();
+	return MODE_FOLDERVIEW;
+    //return centralWidget->currentViewMode();
 }
 
 void MW::fitWindow() {
@@ -263,6 +266,7 @@ void MW::showContextMenu() {
 
 void MW::onSortingChanged(SortingMode mode) {
     folderView.get()->onSortingChanged(mode);
+#if 0
     if(centralWidget.get()->currentViewMode() == ViewMode::MODE_DOCUMENT) {
         switch(mode) {
             case SortingMode::SORT_NAME:      showMessage("Sorting: By Name");              break;
@@ -273,6 +277,7 @@ void MW::onSortingChanged(SortingMode mode) {
             case SortingMode::SORT_SIZE_DESC: showMessage("Sorting: By File Size (desc.)"); break;
         }
     }
+#endif
 }
 
 void MW::setDirectoryPath(QString path) {
@@ -312,19 +317,22 @@ void MW::toggleFullscreenInfoBar() {
 }
 
 void MW::toggleImageInfoOverlay() {
+#if 0
     if(centralWidget->currentViewMode() == MODE_FOLDERVIEW)
         return;
     if(imageInfoOverlay->isHidden())
         imageInfoOverlay->show();
     else
         imageInfoOverlay->hide();
+#endif
 }
 
 void MW::toggleRenameOverlay(QString currentName) {
     if(!renameOverlay)
         setupRenameOverlay();
     if(renameOverlay->isHidden()) {
-        renameOverlay->setBackdropEnabled((centralWidget->currentViewMode() == MODE_FOLDERVIEW));
+		//renameOverlay->setBackdropEnabled((centralWidget->currentViewMode() == MODE_FOLDERVIEW));
+		renameOverlay->setBackdropEnabled(true);
         renameOverlay->setName(currentName);
         renameOverlay->show();
     } else {
@@ -656,6 +664,7 @@ void MW::triggerCropPanel() {
 }
 
 void MW::showCropPanel() {
+#if 0
     if(centralWidget->currentViewMode() == MODE_FOLDERVIEW)
         return;
 
@@ -671,6 +680,7 @@ void MW::showCropPanel() {
         // feed the panel current image info
         updateCropPanelData();
     }
+#endif
 }
 
 void MW::hideCropPanel() {
@@ -687,7 +697,7 @@ void MW::triggerCopyOverlay() {
         return;
     if(!copyOverlay)
         setupCopyOverlay();
-
+#if 0
     if(centralWidget->currentViewMode() == MODE_FOLDERVIEW)
         return;
     if(copyOverlay->operationMode() == OVERLAY_COPY) {
@@ -696,6 +706,7 @@ void MW::triggerCopyOverlay() {
         copyOverlay->setDialogMode(OVERLAY_COPY);
         copyOverlay->show();
     }
+#endif
 }
 
 void MW::triggerMoveOverlay() {
@@ -704,6 +715,7 @@ void MW::triggerMoveOverlay() {
     if(!copyOverlay)
         setupCopyOverlay();
 
+#if 0
     if(centralWidget->currentViewMode() == MODE_FOLDERVIEW)
         return;
     if(copyOverlay->operationMode() == OVERLAY_MOVE) {
@@ -712,6 +724,7 @@ void MW::triggerMoveOverlay() {
         copyOverlay->setDialogMode(OVERLAY_MOVE);
         copyOverlay->show();
     }
+#endif
 }
 
 // quit fullscreen or exit the program
@@ -753,7 +766,8 @@ void MW::onInfoUpdated() {
         renameOverlay->setName(info.fileName);
 
     QString windowTitle;
-    if(centralWidget->currentViewMode() == MODE_FOLDERVIEW) {
+    //if(centralWidget->currentViewMode() == MODE_FOLDERVIEW) {
+	if(true) {
         windowTitle = "Folder view";
         infoBarFullscreen->setInfo("", "No file opened.", "");
         infoBarWindowed->setInfo("", "No file opened.", "");

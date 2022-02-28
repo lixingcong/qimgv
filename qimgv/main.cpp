@@ -1,4 +1,4 @@
-#include <QApplication>
+﻿#include <QApplication>
 #include <QCommandLineParser>
 #include <QStyleFactory>
 #include <QEvent>
@@ -154,15 +154,14 @@ int main(int argc, char *argv[]) {
     QObject::connect(&a, &MacOSApplication::fileOpened, &core, &Core::loadPath);
 #endif
 
-    if(parser.positionalArguments().count())
-        core.loadPath(parser.positionalArguments().at(0));
-    else if(settings->defaultViewMode() == MODE_FOLDERVIEW)
-        core.loadPath(QDir::homePath());
+	settings->setDefaultViewMode(MODE_FOLDERVIEW);
+	core.loadPath(QDir::homePath());
 
     // wait for event queue to catch up before showing window
     // this avoids white background flicker on windows (or not?)
     qApp->processEvents();
 
     core.showGui();
+
     return a.exec();
 }

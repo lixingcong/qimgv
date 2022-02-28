@@ -1,4 +1,4 @@
-/*
+﻿/*
  * This is sort-of a main controller of application.
  * It creates and initializes all components, then sets up gui and actions.
  * Most of communication between components go through here.
@@ -72,62 +72,65 @@ void Core::initComponents() {
 
 void Core::connectComponents() {
     thumbPanelPresenter.setView(mw->getThumbnailPanel());
-    connect(&thumbPanelPresenter, &DirectoryPresenter::fileActivated,
-            this, &Core::onDirectoryViewFileActivated);
-    connect(&thumbPanelPresenter, &DirectoryPresenter::dirActivated,
-            this, &Core::loadPath);
+//    connect(&thumbPanelPresenter, &DirectoryPresenter::fileActivated,
+//            this, &Core::onDirectoryViewFileActivated);
+//    connect(&thumbPanelPresenter, &DirectoryPresenter::dirActivated,
+//            this, &Core::loadPath);
 
     folderViewPresenter.setView(mw->getFolderView());
-    connect(&folderViewPresenter, &DirectoryPresenter::fileActivated,
-            this, &Core::onDirectoryViewFileActivated);
-    connect(&folderViewPresenter, &DirectoryPresenter::dirActivated,
-            this, &Core::loadPath);
+//    connect(&folderViewPresenter, &DirectoryPresenter::fileActivated,
+//            this, &Core::onDirectoryViewFileActivated);
+//    connect(&folderViewPresenter, &DirectoryPresenter::dirActivated,
+//            this, &Core::loadPath);
 
-    connect(&folderViewPresenter, &DirectoryPresenter::draggedOut,
-            this, qOverload<QList<QString>>(&Core::onDraggedOut));
+//    connect(&folderViewPresenter, &DirectoryPresenter::draggedOut,
+//            this, qOverload<QList<QString>>(&Core::onDraggedOut));
 
-    connect(&folderViewPresenter, &DirectoryPresenter::droppedInto,
-            this, qOverload<QList<QString>,QString>(&Core::movePathsTo));
+//    connect(&folderViewPresenter, &DirectoryPresenter::droppedInto,
+//            this, qOverload<QList<QString>,QString>(&Core::movePathsTo));
 
     connect(scriptManager, &ScriptManager::error, mw, &MW::showError);
 
     connect(mw, &MW::opened,                this, &Core::loadPath);
-    connect(mw, &MW::droppedIn,             this, &Core::onDropIn);
-    connect(mw, &MW::copyRequested,         this, &Core::copyCurrentFile);
-    connect(mw, &MW::moveRequested,         this, &Core::moveCurrentFile);
-    connect(mw, &MW::copyUrlsRequested,     this, qOverload<QList<QString>, QString>(&Core::copyPathsTo));
-    connect(mw, &MW::moveUrlsRequested,     this, &Core::movePathsTo);
-    connect(mw, &MW::cropRequested,         this, &Core::crop);
-    connect(mw, &MW::cropAndSaveRequested,  this, &Core::cropAndSave);
-    connect(mw, &MW::saveAsClicked,         this, &Core::requestSavePath);
-    connect(mw, &MW::saveRequested,         this, &Core::saveCurrentFile);
-    connect(mw, &MW::saveAsRequested,       this, &Core::saveCurrentFileAs);
-    connect(mw, &MW::resizeRequested,       this, &Core::resize);
-    connect(mw, &MW::renameRequested,       this, &Core::renameCurrentSelection);
+//    connect(mw, &MW::droppedIn,             this, &Core::onDropIn);
+//    connect(mw, &MW::copyRequested,         this, &Core::copyCurrentFile);
+//    connect(mw, &MW::moveRequested,         this, &Core::moveCurrentFile);
+//    connect(mw, &MW::copyUrlsRequested,     this, qOverload<QList<QString>, QString>(&Core::copyPathsTo));
+//    connect(mw, &MW::moveUrlsRequested,     this, &Core::movePathsTo);
+//    connect(mw, &MW::cropRequested,         this, &Core::crop);
+//    connect(mw, &MW::cropAndSaveRequested,  this, &Core::cropAndSave);
+//    connect(mw, &MW::saveAsClicked,         this, &Core::requestSavePath);
+//    connect(mw, &MW::saveRequested,         this, &Core::saveCurrentFile);
+//    connect(mw, &MW::saveAsRequested,       this, &Core::saveCurrentFileAs);
+//    connect(mw, &MW::resizeRequested,       this, &Core::resize);
+//    connect(mw, &MW::renameRequested,       this, &Core::renameCurrentSelection);
     connect(mw, &MW::sortingSelected,       this, &Core::sortBy);
     connect(mw, &MW::showFoldersChanged,    this, &Core::setFoldersDisplay);
-    connect(mw, &MW::discardEditsRequested, this, &Core::discardEdits);
-    connect(mw, &MW::draggedOut,            this, qOverload<>(&Core::onDraggedOut));
+//    connect(mw, &MW::discardEditsRequested, this, &Core::discardEdits);
+//    connect(mw, &MW::draggedOut,            this, qOverload<>(&Core::onDraggedOut));
 
-    connect(mw, &MW::playbackFinished, this, &Core::onPlaybackFinished);
+//    connect(mw, &MW::playbackFinished, this, &Core::onPlaybackFinished);
 
-    connect(mw, &MW::scalingRequested, this, &Core::scalingRequest);
-    connect(model->scaler, &Scaler::scalingFinished, this, &Core::onScalingFinished);
+//    connect(mw, &MW::scalingRequested, this, &Core::scalingRequest);
+//    connect(model->scaler, &Scaler::scalingFinished, this, &Core::onScalingFinished);
 
-    connect(model.get(), &DirectoryModel::fileAdded,      this, &Core::onFileAdded);
-    connect(model.get(), &DirectoryModel::fileRemoved,    this, &Core::onFileRemoved);
-    connect(model.get(), &DirectoryModel::fileRenamed,    this, &Core::onFileRenamed);
-    connect(model.get(), &DirectoryModel::fileModified,   this, &Core::onFileModified);
+//    connect(model.get(), &DirectoryModel::fileAdded,      this, &Core::onFileAdded);
+//    connect(model.get(), &DirectoryModel::fileRemoved,    this, &Core::onFileRemoved);
+//    connect(model.get(), &DirectoryModel::fileRenamed,    this, &Core::onFileRenamed);
+//    connect(model.get(), &DirectoryModel::fileModified,   this, &Core::onFileModified);
+
     connect(model.get(), &DirectoryModel::loaded,         this, &Core::onModelLoaded);
     connect(model.get(), &DirectoryModel::imageReady,     this, &Core::onModelItemReady);
     connect(model.get(), &DirectoryModel::imageUpdated,   this, &Core::onModelItemUpdated);
     connect(model.get(), &DirectoryModel::sortingChanged, this, &Core::onModelSortingChanged);
     connect(model.get(), &DirectoryModel::loadFailed,     this, &Core::onLoadFailed);
 
+
     connect(&slideshowTimer, &QTimer::timeout, this, &Core::nextImageSlideshow);
 }
 
 void Core::initActions() {
+	return;
     connect(actionManager, &ActionManager::nextImage, this, &Core::nextImage);
     connect(actionManager, &ActionManager::prevImage, this, &Core::prevImage);
     connect(actionManager, &ActionManager::fitWindow, mw, &MW::fitWindow);

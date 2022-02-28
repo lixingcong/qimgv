@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <QApplication>
 #include <QObject>
@@ -90,7 +90,7 @@ private:
     bool cropPanelActive, showInfoBarFullscreen, showInfoBarWindowed, maximized;
     std::shared_ptr<DocumentWidget> docWidget;
     std::shared_ptr<FolderViewProxy> folderView;
-    std::shared_ptr<CentralWidget> centralWidget;
+    //std::shared_ptr<CentralWidget> centralWidget;
     ActiveSidePanel activeSidePanel;
     SidePanel *sidePanel;
     CropPanel *cropPanel;
